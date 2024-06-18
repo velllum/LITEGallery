@@ -6,7 +6,7 @@ volumes:
 services:
 
   postgres:
-    container_name: itmo_postgres
+    container_name: lite_gallery_postgres
     image: postgis/postgis:latest
     env_file:
       - ./docker/env/prod/.env.postgres
@@ -16,7 +16,7 @@ services:
         - "2345:5432"
 
   web:
-    container_name: itmo_web
+    container_name: lite_gallery_web
     build:
       context: .
       dockerfile: ./docker/Dockerfile
@@ -31,7 +31,7 @@ services:
     command: sh -c "alembic upgrade head && python -m src.v1.capital_cities.main"
 
   nginx:
-    container_name: itmo_nginx
+    container_name: lite_gallery_nginx
     working_dir: /app
     image: nginx:stable-alpine
     restart: always
@@ -46,7 +46,7 @@ services:
 
   minio:
     image: minio/minio:latest
-    container_name: minio_latest
+    container_name: lite_gallery_minio
     environment:
       - MINIO_ROOT_USER=admin
       - MINIO_ROOT_PASSWORD=123456789
