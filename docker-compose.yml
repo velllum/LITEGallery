@@ -1,0 +1,64 @@
+version: '3.8'
+
+volumes:
+  pgdata:
+
+services:
+
+  postgres:
+    container_name: itmo_postgres
+    image: postgis/postgis:latest
+    env_file:
+      - ./docker/env/prod/.env.postgres
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    ports:
+        - "2345:5432"
+
+  web:
+    container_name: itmo_web
+    build:
+      context: .
+      dockerfile: ./docker/Dockerfile
+    ports:
+      - '8000:8000'
+    env_file:
+      - ./docker/env/prod/.env.web
+    volumes:
+      - ./:/app
+    depends_on:
+      - postgres
+    command: sh -c "alembic upgrade head && python -m src.v1.capital_cities.main"
+
+  nginx:
+    container_name: itmo_nginx
+    working_dir: /app
+    image: nginx:stable-alpine
+    restart: always
+    ports:
+      - "8080:80"
+    volumes:
+      - ./docker/nginx/dev/:/etc/nginx/conf.d:ro
+    links:
+      - web
+    depends_on:
+      - web
+
+  minio:
+    image: minio/minio:latest
+    container_name: minio_latest
+    environment:
+      - MINIO_ROOT_USER=admin
+      - MINIO_ROOT_PASSWORD=123456789
+    ports:
+      - "9000:9000"
+      - "9001:9001" # порт для панели управления
+    volumes:
+      - ./data:/data # путь до каталога данных на вашем компьютере
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9001/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+    command: server /data --console-address ":9001"
+    restart: always
