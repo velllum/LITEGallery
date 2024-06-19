@@ -1,6 +1,6 @@
 from typing import Annotated
 
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile
 from starlette import status
 from starlette.responses import Response
 
@@ -8,7 +8,7 @@ from src.v1.capital_cities.dependens.capital_city_service import get_capital_cit
 from src.v1.capital_cities.schemas.capital_cities import FeatureCollection, GetFeatureCollection
 from src.v1.capital_cities.services import CapitalCityService
 
-router = APIRouter(prefix='/capital-cities', tags=['capital_cities'])
+router = APIRouter(prefix='/pictures', tags=['pictures'])
 capital_city_service = Annotated[CapitalCityService, Depends(get_capital_city_service)]
 
 
@@ -24,8 +24,8 @@ async def get_by_pk(service: capital_city_service, pk: int):
     return await service.get_one(pk)
 
 
-@router.post('/create', response_model=GetFeatureCollection)
-async def create(service: capital_city_service, data: FeatureCollection):
+@router.post('/{pk}/create', response_model=GetFeatureCollection)
+async def create(service: capital_city_service, data: FeatureCollection, file: UploadFile, pk: int):
     """- создать """
     return await service.create(data)
 
