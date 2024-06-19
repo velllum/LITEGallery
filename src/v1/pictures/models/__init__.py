@@ -1,3 +1,3 @@
 
 
-from .pictures import CapitalCity
+from .pictures import Picture

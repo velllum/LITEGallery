@@ -17,6 +17,9 @@ class Settings(BaseSettings):
     WEB_RELOAD: bool
     WEB_SECRET_KEY: str
 
+    REDIS_HOST: str
+    REDIS_PORT: int
+
     @property
     def DATABASE_URL_ASYNCPG(self) -> str:
         """- асинхронный драйвер """
@@ -27,11 +30,13 @@ class Settings(BaseSettings):
         """- синхронный драйвер """
         return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
-    # с локальной машины
-    model_config = SettingsConfigDict(env_file='./docker/env/dev/.env')
+    @property
+    def REDIS_URL(self):
+        """- ссылка redis """
+        return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
 
-    # docker
-    # model_config = SettingsConfigDict(env_file='./docker/env/prod/.env.web')
+    model_config = SettingsConfigDict(env_file='./docker/env/dev/.env')
 
 
 settings = Settings()
+

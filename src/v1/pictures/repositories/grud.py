@@ -9,8 +9,8 @@ from sqlalchemy.exc import IntegrityError
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.v1.capital_cities.models import CapitalCity
-from src.v1.capital_cities.schemas.capital_cities import FeatureCollection
+from src.v1.pictures.models import Picture
+from src.v1.pictures.schemas.pictures import FeatureCollection
 
 
 class AbstractRepository(ABC):
@@ -41,7 +41,7 @@ class AbstractRepository(ABC):
         raise NotImplementedError
 
 
-class BaseGRUDRepository(AbstractRepository):
+class Repository(AbstractRepository):
     model = None
 
     def __init__(self, db: AsyncSession):
@@ -87,7 +87,7 @@ class BaseGRUDRepository(AbstractRepository):
         await self.db.commit()
 
 
-class CapitalCityGRUDRepository(BaseGRUDRepository):
-    model = CapitalCity
+class PictureRepository(Repository):
+    model = Picture
 
 

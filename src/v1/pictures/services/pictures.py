@@ -1,15 +1,15 @@
 from typing import Any
 
-from src.v1.capital_cities.repositories.grud import CapitalCityGRUDRepository
-from src.v1.capital_cities.schemas.capital_cities import FeatureCollection
+from src.v1.pictures.repositories.grud import PictureRepository
+from src.v1.pictures.schemas.pictures import FeatureCollection
 
 feature_collection = dict[str, str | list[Any]]
 
 
-class CapitalCityService:
+class PictureService:
     """- сервисы (GRUD операции) столицы городов """
 
-    def __init__(self, grud: CapitalCityGRUDRepository):
+    def __init__(self, grud: PictureRepository):
         self.__features = []
         self.__instance = Any
         self.grud = grud

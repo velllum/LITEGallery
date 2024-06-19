@@ -20,60 +20,15 @@ class Picture(Base):
     def __repr__(self) -> str:
         return f"Picture(id={self.id!r}, country={self.country!r}, city={self.city!r})"
 
-    async def feature(self) -> dict:
-        """- получить словарь в feature GEOJSON """
-        return {
-            "type": "Feature",
-            "geometry": {
-                "type": self.geom_type,
-                "coordinates": [self.longitude, self.latitude]
-            },
-            "properties": {
-                "id": self.id,
-                "country": self.country,
-                "city": self.city,
-                "created_date": self.created_date,
-                "updated_date": self.updated_date
-            }
-        }
-
-    @property
-    def longitude(self):
-        """- получить долготу """
-        return self.shape_geom.x
-
-    @property
-    def latitude(self):
-        """- получить широту """
-        return self.shape_geom.y
-
-    @property
-    def geom_type(self):
-        """- получить гео тип  """
-        return self.shape_geom.geom_type
-
-    @property
-    def shape_geom(self):
-        """- получить объект геоданных """
-        return to_shape(self.geom)
-
     @staticmethod
     async def create(data):
         """- создать новый объект """
-        features = data.features[0]
-        instance = Picture(
-            country=features.properties.country,
-            city=features.properties.city,
-            geom=from_shape(shapely.Point(features.geometry.coordinates))
-        )
+        instance = Picture()
         return instance
 
     @staticmethod
     async def update(instance, data):
         """- создать новый объект """
-        features = data.features[0]
-        instance.country = features.properties.country
-        instance.city = features.properties.city
-        instance.geom = from_shape(shapely.Point(features.geometry.coordinates))
+
         return instance
 

@@ -1,3 +1,3 @@
 
 
-from .pictures import CapitalCityService
+from .pictures import PictureService

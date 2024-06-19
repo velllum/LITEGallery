@@ -1,6 +1,5 @@
 from logging.config import fileConfig
 
-from geoalchemy2 import alembic_helpers
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
@@ -8,7 +7,7 @@ from alembic import context
 
 from src.core.configs import settings
 from src.core.database import Base
-from src.v1.capital_cities.models import CapitalCity
+from src.v1.pictures.models import Picture
 
 config = context.config
 
@@ -39,9 +38,6 @@ def run_migrations_offline() -> None:
         literal_binds=True,
         dialect_opts={"paramstyle": "named"},
         compare_server_default=True,
-        include_object=alembic_helpers.include_object,
-        process_revision_directives=alembic_helpers.writer,
-        render_item=alembic_helpers.render_item,
     )
 
     with context.begin_transaction():
@@ -66,9 +62,6 @@ def run_migrations_online() -> None:
             connection=connection,
             target_metadata=target_metadata,
             compare_server_default=True,
-            include_object=alembic_helpers.include_object,
-            process_revision_directives=alembic_helpers.writer,
-            render_item=alembic_helpers.render_item,
         )
 
         with context.begin_transaction():

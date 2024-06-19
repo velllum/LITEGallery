@@ -5,7 +5,7 @@ from sqladmin import Admin
 
 from src.core.configs import settings
 from src.core.database import db_manager
-from src.v1.admins.capital_cities.views import register_views
+from src.v1.admins.pictures.views import register_views
 
 logger = logging.getLogger(__name__)
 
