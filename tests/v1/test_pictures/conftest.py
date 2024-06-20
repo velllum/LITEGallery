@@ -2,15 +2,27 @@ import copy
 
 import pytest
 from fastapi import FastAPI
-from geojson_pydantic.types import Position2D, Position3D
 from sqlalchemy import select
 from starlette.testclient import TestClient
 
 from src.core.configs import settings
-from src.core.database import get_session
+from src.core.database import get_session, db_manager
 from src.v1 import API_PREFIX, create_app
-from src.v1.capital_cities.models import CapitalCity
-from src.v1.capital_cities.schemas.capital_cities import FeatureCollection, FeatureProperties
+from src.v1.pictures.models import Picture
+from src.v1.pictures.schemas.pictures import FeatureCollection, FeatureProperties
+
+
+async def add_test_data_table():
+    """- добавление тестовых данных """
+    async with db_manager.session() as session:
+        async with session.begin():
+            capitals = [
+                Picture(country="Россия", city="Москва", geom='POINT(37.6156 55.7520)'),
+                Picture(country="Украина", city="Киев", geom='POINT(30.5234 50.4501)'),
+                Picture(country="Беларусь", city="Минск", geom='POINT(27.5670 53.9000)'),
+            ]
+            session.add_all(capitals)
+            await session.commit()
 
 
 @pytest.fixture

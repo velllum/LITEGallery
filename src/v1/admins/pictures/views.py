@@ -1,5 +1,3 @@
-import shapely
-from geoalchemy2.shape import from_shape
 from sqladmin import ModelView, Admin
 
 from src.v1.admins.capital_cities.forms import CreateCapitalCityAdminForm
@@ -33,5 +31,4 @@ async def register_views(app_admin: Admin) -> Admin:
     """- инициализация представления админ панели """
     app_admin.add_view(CapitalCityAdmin)
     return app_admin
-
 

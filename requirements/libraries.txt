@@ -12,3 +12,4 @@ minio==7.2.7
 pillow==10.3.0
 redis==5.0.6
 celery==5.4.0
+flower==2.0.1
