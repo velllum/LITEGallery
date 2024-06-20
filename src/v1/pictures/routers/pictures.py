@@ -4,12 +4,12 @@ from fastapi import APIRouter, Depends, UploadFile
 from starlette import status
 from starlette.responses import Response
 
-from src.v1.capital_cities.dependens.capital_city_service import get_capital_city_service
-from src.v1.capital_cities.schemas.capital_cities import FeatureCollection, GetFeatureCollection
-from src.v1.capital_cities.services import CapitalCityService
+from src.v1.pictures.dependens.pictures_service import get_capital_city_service
+from src.v1.pictures.schemas.pictures import FeatureCollection, GetFeatureCollection
+from src.v1.pictures.services import PictureService
 
 router = APIRouter(prefix='/pictures', tags=['pictures'])
-capital_city_service = Annotated[CapitalCityService, Depends(get_capital_city_service)]
+capital_city_service = Annotated[PictureService, Depends(get_capital_city_service)]
 
 
 @router.get('/', response_model=GetFeatureCollection)

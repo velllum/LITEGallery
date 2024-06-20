@@ -1,7 +1,7 @@
 from src.core.celery import celery
 
 
-@celery.task
+@celery.task(name='98798789787789789')
 def task_add():
     """- добавить новое изображение """
     # TODO: здесь должен быть сервис который добавить в хранилище

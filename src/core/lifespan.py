@@ -16,7 +16,7 @@ logger = logging.getLogger(__name__)
 async def lifespan(app: FastAPI):
     """- События продолжительности жизни """
     await start_database()
-    await start_test_data()
+    # await start_test_data()
     await start_routers(app)
     await start_admin(app)
 
@@ -43,13 +43,13 @@ async def start_admin(app: FastAPI):
     logger.info("ЗАПУСК АДМИН ПАНЕЛИ")
 
 
-async def start_test_data():
-    """- регистрируем тестовые данные """
-    try:
-        await add_test_data_table()
-        logger.info("ДОБАВЛЕНИЕ ТЕСТОВЫХ ДАННЫХ ВЫПОЛНЕНО")
-    except:
-        logger.info("[ОШИБКА] ПРИ ДОБАВЛЕНИИ ТЕСТОВЫХ ДАННЫХ ВЫПОЛНЕНО")
+# async def start_test_data():
+#     """- регистрируем тестовые данные """
+#     try:
+#         await add_test_data_table()
+#         logger.info("ДОБАВЛЕНИЕ ТЕСТОВЫХ ДАННЫХ ВЫПОЛНЕНО")
+#     except:
+#         logger.info("[ОШИБКА] ПРИ ДОБАВЛЕНИИ ТЕСТОВЫХ ДАННЫХ ВЫПОЛНЕНО")
 
 
 async def close_database():

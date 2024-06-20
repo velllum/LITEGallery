@@ -1,6 +1,5 @@
 from datetime import datetime
 
-from geojson_pydantic import Feature as BaseFeature, FeatureCollection as BaseFeatureCollection, Point
 from pydantic import BaseModel, ConfigDict
 
 
@@ -24,12 +23,12 @@ class GetFeatureProperties(Base):
     updated_date: datetime
 
 
-class GetFeature(BaseFeature):
-    geometry: Point
+class GetFeature(Base):
+    geometry: GetFeatureProperties
     properties: GetFeatureProperties
 
 
-class GetFeatureCollection(BaseFeatureCollection):
+class GetFeatureCollection(Base):
     features: list[GetFeature]
 
 
@@ -40,12 +39,12 @@ class FeatureProperties(Base):
     ...
 
 
-class Feature(BaseFeature):
-    geometry: Point
+class Feature(Base):
+    geometry: FeatureProperties
     properties: FeatureProperties
 
 
-class FeatureCollection(BaseFeatureCollection):
+class FeatureCollection(Base):
     features: list[Feature]
 
 
