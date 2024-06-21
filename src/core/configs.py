@@ -23,9 +23,6 @@ class Settings(BaseSettings):
     MINIO_ROOT_USER: str
     MINIO_ROOT_PASSWORD: int
 
-    CELERY_BROKER_URL: str
-    CELERY_RESULT_BACKEND: str
-
     @property
     def DATABASE_URL_ASYNCPG(self) -> str:
         """- асинхронный драйвер """
