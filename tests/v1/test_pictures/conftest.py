@@ -12,17 +12,17 @@ from src.v1.pictures.models import Picture
 from src.v1.pictures.schemas.pictures import FeatureCollection, FeatureProperties
 
 
-# async def add_test_data_table():
-#     """- добавление тестовых данных """
-#     async with db_manager.session() as session:
-#         async with session.begin():
-#             capitals = [
-#                 Picture(country="Россия", city="Москва", geom='POINT(37.6156 55.7520)'),
-#                 Picture(country="Украина", city="Киев", geom='POINT(30.5234 50.4501)'),
-#                 Picture(country="Беларусь", city="Минск", geom='POINT(27.5670 53.9000)'),
-#             ]
-#             session.add_all(capitals)
-#             await session.commit()
+async def add_test_data_table():
+    """- добавление тестовых данных """
+    async with db_manager.session() as session:
+        async with session.begin():
+            capitals = [
+                Picture(country="Россия", city="Москва", geom='POINT(37.6156 55.7520)'),
+                Picture(country="Украина", city="Киев", geom='POINT(30.5234 50.4501)'),
+                Picture(country="Беларусь", city="Минск", geom='POINT(27.5670 53.9000)'),
+            ]
+            session.add_all(capitals)
+            await session.commit()
 
 
 @pytest.fixture

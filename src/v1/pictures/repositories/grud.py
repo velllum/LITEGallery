@@ -30,16 +30,6 @@ class AbstractRepository(ABC):
         """- создать """
         raise NotImplementedError
 
-    @abstractmethod
-    async def update(self, *args, **kwargs) -> None:
-        """- обновить """
-        raise NotImplementedError
-
-    @abstractmethod
-    async def delete(self, *args, **kwargs) -> None:
-        """- удалить """
-        raise NotImplementedError
-
 
 class Repository(AbstractRepository):
     model = None
@@ -69,22 +59,6 @@ class Repository(AbstractRepository):
             return instance
         except IntegrityError or UniqueViolationError:
             raise HTTPException(status_code=status.HTTP_200_OK, detail='СТРАНА И ГОРОД УЖЕ СУЩЕСТВУЮТ')
-
-    async def update(self, pk: int, data: FeatureCollection) -> Type[Any]:
-        """- обновить """
-        try:
-            instance = await self.model.update(await self.get_one(pk), data)
-            await self.db.commit()
-            await self.db.refresh(instance)
-            return instance
-        except IntegrityError or UniqueViolationError:
-            raise HTTPException(status_code=status.HTTP_200_OK, detail='СТРАНА И ГОРОД УЖЕ СУЩЕСТВУЮТ')
-
-    async def delete(self, pk: int):
-        """- удалить """
-        instance = await self.get_one(pk)
-        await self.db.delete(instance)
-        await self.db.commit()
 
 
 class PictureRepository(Repository):

@@ -7,42 +7,42 @@ services:
 
   postgres:
     container_name: lite_gallery_postgres
-    image: postgis/postgis:latest
+    image: postgres
     env_file:
       - ./docker/env/dev/.env
     volumes:
       - pgdata:/var/lib/postgresql/data
     ports:
-        - "2345:5432"
+      - "2345:5432"
 
-  web:
-    container_name: lite_gallery_web
-    build:
-      context: .
-      dockerfile: ./docker/Dockerfile
-    ports:
-      - '8000:8000'
-    env_file:
-      - ./docker/env/dev/.env
-    volumes:
-      - ./:/app
-    depends_on:
-      - postgres
-    command: sh -c "alembic upgrade head && python -m src.v1.capital_cities.main"
-
-  nginx:
-    container_name: lite_gallery_nginx
-    working_dir: /app
-    image: nginx:stable-alpine
-    restart: always
-    ports:
-      - "8080:80"
-    volumes:
-      - ./docker/nginx/dev/:/etc/nginx/conf.d:ro
-    links:
-      - web
-    depends_on:
-      - web
+#  web:
+#    container_name: lite_gallery_web
+#    build:
+#      context: .
+#      dockerfile: ./docker/Dockerfile
+#    ports:
+#      - '8000:8000'
+#    env_file:
+#      - ./docker/env/dev/.env
+#    volumes:
+#      - ./:/app
+#    depends_on:
+#      - postgres
+#    command: sh -c "alembic upgrade head && python -m src.v1.capital_cities.main"
+#
+#  nginx:
+#    container_name: lite_gallery_nginx
+#    working_dir: /app
+#    image: nginx:stable-alpine
+#    restart: always
+#    ports:
+#      - "8080:80"
+#    volumes:
+#      - ./docker/nginx/dev/:/etc/nginx/conf.d:ro
+#    links:
+#      - web
+#    depends_on:
+#      - web
 
   minio:
     image: minio/minio:latest
@@ -53,7 +53,7 @@ services:
       - "9000:9000"
       - "9001:9001" # порт для панели управления
     volumes:
-      - ./data:/data # путь до каталога данных на вашем компьютере
+      - ./data_storage:/data # путь до каталога данных на вашем компьютере
     healthcheck:
       test: ["CMD", "curl", "-f", "http://localhost:9001/minio/health/live"]
       interval: 30s
@@ -62,35 +62,32 @@ services:
     command: server /data --console-address ":9001"
     restart: always
 
-  worker:
-    build: ./project
-    container_name: lite_gallery_worker
-    command: celery -A worker.celery worker --loglevel=info
-    volumes:
-      - ./project:/usr/src/app
-    env_file:
-      - ./docker/env/dev/.env
-    depends_on:
-      - web
-      - redis
-
-  redis:
-    image: redis:7
-    container_name: lite_gallery_redis
-
-  flower:
-    image: fast-api-celery-custom
-    container_name: celery-flower
-    networks:
-      - production-boilerplate
-    environment:
-      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
-      - CELERY_BACKEND_URL=${CELERY_BACKEND_URL}
-    env_file:
-      - ./docker/env/dev/.env
-    command: ./starter.sh --target flower
-    ports:
-      - "5555:5555"
-    depends_on:
-      - redis
-      - celery
+#  worker:
+#    container_name: lite_gallery_worker
+#    command: celery -A worker.celery worker --loglevel=info
+#    env_file:
+#      - ./docker/env/dev/.env
+#    depends_on:
+#      - web
+#      - redis
+#
+#  redis:
+#    image: redis:7
+#    container_name: lite_gallery_redis
+#
+#  flower:
+#    image: fast-api-celery-custom
+#    container_name: celery-flower
+#    networks:
+#      - production-boilerplate
+#    environment:
+#      - CELERY_BROKER_URL=${CELERY_BROKER_URL}
+#      - CELERY_BACKEND_URL=${CELERY_BACKEND_URL}
+#    env_file:
+#      - ./docker/env/dev/.env
+#    command: ./starter.sh --target flower
+#    ports:
+#      - "5555:5555"
+#    depends_on:
+#      - redis
+#      - celery

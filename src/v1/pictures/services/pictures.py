@@ -29,15 +29,6 @@ class PictureService:
         self.__instance = await self.grud.create(data)
         return await self.__feature_collection()
 
-    async def update(self, pk: int, data: FeatureCollection) -> feature_collection:
-        """- обновить """
-        self.__instance = await self.grud.update(pk, data)
-        return await self.__feature_collection()
-
-    async def delete(self, pk: int):
-        """- удалить """
-        await self.grud.delete(pk)
-
     async def __feature_collection(self) -> feature_collection:
         """- получить коллекцию в стиле GEOJSON """
         self.__features.append(await self.__instance.feature())

@@ -13,12 +13,13 @@ class Picture(Base):
     id = sa.Column(sa.Integer, primary_key=True, index=True)
     filename = Column(String, index=True, nullable=False)
     project_id = Column(Integer, index=True, nullable=False)
-    state = Column(String, index=True, nullable=False)
+    state = Column(String, index=True, nullable=False, default="uploaded")  # uploaded, processing, done, error
     original = Column(String, nullable=False)
-    thumb = Column(String, nullable=False)
-    big_thumb = Column(String, nullable=False)
-    big_1920 = Column(String, nullable=False)
-    d2500 = Column(String, nullable=False)
+
+    thumb = Column(String, nullable=True)
+    big_thumb = Column(String, nullable=True)
+    big_1920 = Column(String, nullable=True)
+    d2500 = Column(String, nullable=True)
 
     created_date = sa.Column(sa.DateTime, server_default=func.now())
     updated_date = sa.Column(sa.DateTime, server_default=func.now(), onupdate=func.now())
@@ -31,10 +32,3 @@ class Picture(Base):
         """- создать новый объект """
         instance = Picture()
         return instance
-
-    @staticmethod
-    async def update(instance, data):
-        """- создать новый объект """
-
-        return instance
-
