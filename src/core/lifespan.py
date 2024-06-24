@@ -6,6 +6,7 @@ from fastapi import FastAPI
 from src.core.configs import settings
 from src.core.database import db_manager
 from src.core.routers import register_routers
+from src.core.storages.manager import minio_manager
 from src.v1.admins import create_admin
 from tests.v1.test_pictures.conftest import add_test_data_table
 
@@ -15,6 +16,7 @@ logger = logging.getLogger(__name__)
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """- События продолжительности жизни """
+    await start_minio()
     await start_database()
     await start_test_data()
     await start_routers(app)
@@ -23,6 +25,18 @@ async def lifespan(app: FastAPI):
     yield
 
     await close_database()
+
+
+async def start_minio():
+    """- регистрируем подключение к хранилищу данных """
+    minio_manager.init(
+        endpoint=settings.MINIO_ENDPOINT,
+        access_key=settings.MINIO_ACCESS_KEY,
+        secret_key=settings.MINIO_SECRET_KEY,
+        secure=False
+    )
+    minio_manager.make_buckets(settings.MINIO_CLIENT_NAME_BUCKETS.split())
+    logger.info("ЗАПУСК ХРАНИЛИЩА ВЫПОЛНЕН")
 
 
 async def start_database():

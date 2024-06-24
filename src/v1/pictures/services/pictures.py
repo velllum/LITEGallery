@@ -1,6 +1,6 @@
 from typing import Any
 
-from src.v1.pictures.repositories.grud import PictureRepository
+from src.v1.pictures.repositories.db_grud import PictureRepository
 from src.v1.pictures.schemas.pictures import FeatureCollection
 
 feature_collection = dict[str, str | list[Any]]

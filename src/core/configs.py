@@ -23,6 +23,13 @@ class Settings(BaseSettings):
     MINIO_ROOT_USER: str
     MINIO_ROOT_PASSWORD: int
 
+    MINIO_ACCESS_KEY: str
+    MINIO_SECRET_KEY: str
+
+    MINIO_CLIENT_NAME_BUCKETS: str
+    MINIO_CLIENT_HOST: str
+    MINIO_CLIENT_PORT: str
+
     @property
     def DATABASE_URL_ASYNCPG(self) -> str:
         """- асинхронный драйвер """
@@ -37,6 +44,11 @@ class Settings(BaseSettings):
     def REDIS_URL(self):
         """- ссылка redis """
         return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
+
+    @property
+    def MINIO_ENDPOINT(self):
+        """- ссылка для получения данных с хранилища MinIO """
+        return f"{self.MINIO_CLIENT_HOST}:{self.MINIO_CLIENT_PORT}"
 
     model_config = SettingsConfigDict(env_file='./docker/env/dev/.env')
 

@@ -16,4 +16,3 @@ def register_middleware(app):
     logger.info("ЗАПУСК ПРОМЕЖУТОЧНОГО ПРОГРАММНОГО ПО")
     return app
 
-

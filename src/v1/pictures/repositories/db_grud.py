@@ -10,7 +10,6 @@ from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
 from src.v1.pictures.models import Picture
-from src.v1.pictures.schemas.pictures import FeatureCollection
 
 
 class AbstractRepository(ABC):
@@ -49,7 +48,7 @@ class Repository(AbstractRepository):
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ID НЕ НАЙДЕН')
         return instance
 
-    async def create(self, data: FeatureCollection) -> Type[Any]:
+    async def create(self, data: dict) -> Type[Any]:
         """- создать """
         try:
             instance = await self.model.create(data)
@@ -63,5 +62,3 @@ class Repository(AbstractRepository):
 
 class PictureRepository(Repository):
     model = Picture
-
-

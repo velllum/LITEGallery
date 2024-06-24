@@ -17,8 +17,8 @@ class Picture(Base):
     original = Column(String, nullable=False)
 
     thumb = Column(String, nullable=True)
-    big_thumb = Column(String, nullable=True)
-    big_1920 = Column(String, nullable=True)
+    bigthumb = Column(String, nullable=True)
+    big1920 = Column(String, nullable=True)
     d2500 = Column(String, nullable=True)
 
     created_date = sa.Column(sa.DateTime, server_default=func.now())

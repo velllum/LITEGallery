@@ -1,0 +1,21 @@
+from minio import Minio
+
+
+class MinIoManager:
+    __client = None
+
+    @property
+    def client(self) -> Minio:
+        return self.__client
+
+    def init(self, **kwargs):
+        if not self.__client:
+            self.__client = Minio(**kwargs)
+
+    def make_buckets(self, buckets: list):
+        for bucket in buckets:
+            if not self.client.bucket_exists(bucket):
+                self.client.make_bucket(bucket)
+
+
+minio_manager = MinIoManager()
