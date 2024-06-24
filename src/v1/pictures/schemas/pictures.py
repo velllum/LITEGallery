@@ -23,25 +23,9 @@ class Version(BaseModel):
 class Get(Base):
     id: int
     state: str  # uploaded, processing, done, error
-    Version: dict
+    version: Version
     created_date: datetime
     updated_date: datetime
 
     model_config = ConfigDict(from_attributes=True)
 
-
-class ImageUpload(BaseModel):
-    filename: str
-    project_id: int
-
-
-class ImageResponse(BaseModel):
-    id: int
-    filename: str
-    project_id: int
-    state: str
-    created_at: datetime
-    updated_at: datetime
-
-    class Config:
-        orm_mode = True
