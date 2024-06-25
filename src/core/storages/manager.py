@@ -1,7 +1,7 @@
 from minio import Minio
 
 
-class MinIoManager:
+class StorageManager:
     __client = None
 
     @property
@@ -18,4 +18,4 @@ class MinIoManager:
                 self.client.make_bucket(bucket)
 
 
-minio_manager = MinIoManager()
+storage_manager = StorageManager()

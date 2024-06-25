@@ -13,13 +13,10 @@ class Picture(Base):
     id = sa.Column(sa.Integer, primary_key=True, index=True)
     filename = Column(String, index=True, nullable=False)
     project_id = Column(Integer, index=True, nullable=False)
-    state = Column(String, index=True, nullable=False, default="uploaded")  # uploaded, processing, done, error
-    original = Column(String, nullable=False)
 
-    thumb = Column(String, nullable=True)
-    bigthumb = Column(String, nullable=True)
-    big1920 = Column(String, nullable=True)
-    d2500 = Column(String, nullable=True)
+    # uploaded, processing, done, error (загружено, обработка, выполнено, ошибка)
+    # меняется по состоянию работы websocket
+    state = Column(String, index=True, nullable=False, default="uploaded")
 
     created_date = sa.Column(sa.DateTime, server_default=func.now())
     updated_date = sa.Column(sa.DateTime, server_default=func.now(), onupdate=func.now())
@@ -30,5 +27,5 @@ class Picture(Base):
     @staticmethod
     async def create(data):
         """- создать новый объект """
-        instance = Picture()
+        instance = Picture(**data)
         return instance

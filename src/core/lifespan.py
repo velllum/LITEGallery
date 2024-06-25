@@ -6,7 +6,7 @@ from fastapi import FastAPI
 from src.core.configs import settings
 from src.core.database import db_manager
 from src.core.routers import register_routers
-from src.core.storages.manager import minio_manager
+from src.core.storages.manager import storage_manager
 from src.v1.admins import create_admin
 from tests.v1.test_pictures.conftest import add_test_data_table
 
@@ -29,13 +29,13 @@ async def lifespan(app: FastAPI):
 
 async def start_minio():
     """- регистрируем подключение к хранилищу данных """
-    minio_manager.init(
+    storage_manager.init(
         endpoint=settings.MINIO_ENDPOINT,
-        access_key=settings.MINIO_ACCESS_KEY,
-        secret_key=settings.MINIO_SECRET_KEY,
+        access_key=settings.MINIO_ROOT_USER,
+        secret_key=settings.MINIO_ROOT_PASSWORD,
         secure=False
     )
-    minio_manager.make_buckets(settings.MINIO_CLIENT_NAME_BUCKETS.split())
+    storage_manager.make_buckets(settings.MINIO_CLIENT_NAME_BUCKETS)
     logger.info("ЗАПУСК ХРАНИЛИЩА ВЫПОЛНЕН")
 
 

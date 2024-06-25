@@ -23,9 +23,6 @@ class Settings(BaseSettings):
     MINIO_ROOT_USER: str
     MINIO_ROOT_PASSWORD: int
 
-    MINIO_ACCESS_KEY: str
-    MINIO_SECRET_KEY: str
-
     MINIO_CLIENT_NAME_BUCKETS: str
     MINIO_CLIENT_HOST: str
     MINIO_CLIENT_PORT: str
