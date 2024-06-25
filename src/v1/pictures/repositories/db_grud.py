@@ -34,18 +34,6 @@ class Repository(AbstractRepository):
     def __init__(self, db: AsyncSession):
         self.__db = db
 
-    async def get_all(self, skip: int = 0, limit: int = 100) -> Sequence[Any]:
-        """- получить список """
-        instance = await self.__db.execute(select(self.model).offset(skip).limit(limit))
-        return instance.scalars().all()
-
-    async def get_one(self, pk: int) -> Type[Any]:
-        """- получить по pk """
-        instance = await self.__db.get(self.model, pk)
-        if not instance:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ID НЕ НАЙДЕН')
-        return instance
-
     async def create(self, data: dict) -> Type[Any]:
         """- создать """
         instance = await self.model.create(data)
@@ -53,6 +41,20 @@ class Repository(AbstractRepository):
         await self.__db.commit()
         await self.__db.refresh(instance)
         return instance
+
+    async def get_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
+        """- получить список """
+        instance = await self.__db.execute(
+            select(self.model).where(self.model.project_id == project_id).offset(skip).limit(limit)
+        )
+        return instance.scalars().all()
+
+    # async def get_one(self, pk: int) -> Type[Any]:
+    #     """- получить по pk """
+    #     instance = await self.__db.get(self.model, pk)
+    #     if not instance:
+    #         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ID НЕ НАЙДЕН')
+    #     return instance
 
 
 class PictureRepository(Repository):

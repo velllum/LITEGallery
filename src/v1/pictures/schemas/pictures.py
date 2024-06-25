@@ -23,9 +23,12 @@ class Version(BaseModel):
 
 
 class Upload(Base):
+    # original_link: str
     ...
 
 
+
 class Get(Base):
-    version: Version
+    version_link: Version
+    version_link_download: Version
 
