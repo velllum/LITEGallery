@@ -6,9 +6,7 @@ from pydantic import BaseModel, ConfigDict
 class Base(BaseModel):
     id: int
     state: str
-    filename: str
     project_id: int
-    # path: str
     created_date: datetime
     updated_date: datetime
 

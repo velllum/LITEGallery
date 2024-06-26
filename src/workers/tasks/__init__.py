@@ -1,3 +1,3 @@
 
 
-from .pictures import add_to_storage
+from .pictures import task_add_picture_versions_to_storage

@@ -10,11 +10,11 @@ class StorageService:
     """- сервис (GRUD операций) хранилища """
 
     def __init__(self, storage: StorageRepository):
-        self.storage = storage
+        self.__storage = storage
 
     async def add(self, file: UploadFile, instance: Type):
         """- создать """
-        return await self.storage.add(file, instance)
+        return await self.__storage.add(file, instance)
 
     # async def get_one(self, pk: int):
     #     """- получить по pk """

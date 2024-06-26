@@ -18,7 +18,7 @@ async def upload(picture: picture_service, storage: storage_service, file: Uploa
                  project_id: int = Form(...)):
     """- Загрузить файл на сервер  """
     # TODO: сделать проверку на допустимые файловые расширения
-    instance = await picture.create(filename=file.filename, project_id=project_id)
+    instance = await picture.create(project_id=project_id)
     await storage.add(file, instance)
     return instance
 

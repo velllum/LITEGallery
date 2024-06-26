@@ -11,6 +11,7 @@ from starlette import status
 from src.core.configs import settings
 from src.core.storages.manager import StorageManager
 from src.v1.pictures.models import Picture
+from src.v1.pictures.utils.pictures import get_full_path
 
 
 class AbstractRepository(ABC):
@@ -35,8 +36,9 @@ class Repository(AbstractRepository):
     async def add(self, file: UploadFile, instance: Type | Picture) -> ObjectWriteResult:
         """- добавить """
         _object = self.__storage.client.put_object(
-            bucket_name=settings.MINIO_CLIENT_NAME_BUCKETS,  # TODO: применять через метод с проверкой хранилища
-            object_name=await instance.get_full_path('original'),
+            bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
+            # object_name=await instance.get_full_path('original', file.filename),
+            object_name=await get_full_path(instance, 'original', file.filename),
             data=io.BytesIO(file.file.read()),
             content_type=file.content_type,
             length=file.size

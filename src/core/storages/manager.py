@@ -14,8 +14,15 @@ class StorageManager:
 
     def make_buckets(self, buckets: list):
         for bucket in buckets:
-            if not self.__client.bucket_exists(bucket):
-                self.__client.make_bucket(bucket)
+            self.is_bucket(bucket)
+
+    def get_bucket(self, bucket):
+        self.is_bucket(bucket)
+        return bucket
+
+    def is_bucket(self, bucket):
+        if not self.__client.bucket_exists(bucket):
+            self.__client.make_bucket(bucket)
 
 
 storage_manager = StorageManager()
