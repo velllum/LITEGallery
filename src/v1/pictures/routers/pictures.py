@@ -17,13 +17,14 @@ storage_service = Annotated[StorageService, Depends(get_storage_service)]
 async def upload(picture: picture_service, storage: storage_service, file: UploadFile = File(...),
                  project_id: int = Form(...)):
     """- Загрузить файл на сервер  """
+    # TODO: сделать проверку на допустимые файловые расширения
     instance = await picture.create(filename=file.filename, project_id=project_id)
-    await storage.add(file, instance.id, project_id)
+    await storage.add(file, instance)
     return instance
 
 
 @router.get('/{project_id}/pictures', response_model=Get)
-async def get_all(service: picture_service, project_id: int, skip: int = 0, limit: int = 100):
+async def get_by_id_all(service: picture_service, project_id: int, skip: int = 0, limit: int = 100):
     """- получить список """
-    return await service.get_all(project_id, skip=skip, limit=limit)
+    return await service.get_by_id_all(project_id, skip=skip, limit=limit)
 

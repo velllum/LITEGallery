@@ -13,18 +13,13 @@ from src.v1.pictures.models import Picture
 class AbstractRepository(ABC):
 
     @abstractmethod
-    async def get_all(self, *args, **kwargs) -> None:
-        """- получить список """
-        raise NotImplementedError
-
-    @abstractmethod
-    async def get_one(self, *args, **kwargs) -> None:
-        """- получить экземпляр """
-        raise NotImplementedError
-
-    @abstractmethod
     async def create(self, *args, **kwargs) -> None:
         """- создать """
+        raise NotImplementedError
+
+    @abstractmethod
+    async def get_by_id_all(self, *args, **kwargs) -> None:
+        """- получить список """
         raise NotImplementedError
 
 
@@ -42,7 +37,7 @@ class Repository(AbstractRepository):
         await self.__db.refresh(instance)
         return instance
 
-    async def get_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
+    async def get_by_id_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
         """- получить список """
         instance = await self.__db.execute(
             select(self.model).where(self.model.project_id == project_id).offset(skip).limit(limit)

@@ -21,7 +21,7 @@ class Settings(BaseSettings):
     REDIS_PORT: int
 
     MINIO_ROOT_USER: str
-    MINIO_ROOT_PASSWORD: int
+    MINIO_ROOT_PASSWORD: str
 
     MINIO_CLIENT_NAME_BUCKETS: str
     MINIO_CLIENT_HOST: str
@@ -33,17 +33,17 @@ class Settings(BaseSettings):
         return f"postgresql+asyncpg://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
     @property
-    def DATABASE_URL_PSYCOPG(self):
+    def DATABASE_URL_PSYCOPG(self) -> str:
         """- синхронный драйвер """
         return f"postgresql+psycopg2://{self.DB_USER}:{self.DB_PASS}@{self.DB_HOST}:{self.DB_PORT}/{self.DB_NAME}"
 
     @property
-    def REDIS_URL(self):
+    def REDIS_URL(self) -> str:
         """- ссылка redis """
         return f"redis://{self.REDIS_HOST}:{self.REDIS_PORT}/0"
 
     @property
-    def MINIO_ENDPOINT(self):
+    def MINIO_ENDPOINT(self) -> str:
         """- ссылка для получения данных с хранилища MinIO """
         return f"{self.MINIO_CLIENT_HOST}:{self.MINIO_CLIENT_PORT}"
 

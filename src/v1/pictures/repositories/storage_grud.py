@@ -10,6 +10,7 @@ from starlette import status
 
 from src.core.configs import settings
 from src.core.storages.manager import StorageManager
+from src.v1.pictures.models import Picture
 
 
 class AbstractRepository(ABC):
@@ -20,7 +21,7 @@ class AbstractRepository(ABC):
         raise NotImplementedError
 
     @abstractmethod
-    async def get_all(self, *args, **kwargs) -> None:
+    async def get_by_id_all(self, *args, **kwargs) -> None:
         """- получить список """
         raise NotImplementedError
 
@@ -31,20 +32,20 @@ class Repository(AbstractRepository):
         self.__db = db
         self.__storage = storage_manager
 
-    async def add(self, file: UploadFile, instance_id: int, project_id: int) -> ObjectWriteResult:
+    async def add(self, file: UploadFile, instance: Type | Picture) -> ObjectWriteResult:
         """- добавить """
-        instance = self.__storage.client.put_object(
-            bucket_name=settings.MINIO_CLIENT_NAME_BUCKETS,
-            object_name=f"{project_id}/{instance_id}/{file.filename}",
+        _object = self.__storage.client.put_object(
+            bucket_name=settings.MINIO_CLIENT_NAME_BUCKETS,  # TODO: применять через метод с проверкой хранилища
+            object_name=await instance.get_full_path('original'),
             data=io.BytesIO(file.file.read()),
             content_type=file.content_type,
             length=file.size
         )
-        if not instance:
+        if not _object:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ОШИБКА ДОБАВЛЕНИЯ В ХРАНИЛИЩА')
-        return instance
+        return _object
 
-    async def get_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
+    async def get_by_id_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
         """- получить список """
         # TODO: Описать получение всех файлов из хранилища по указанному id проекта project_id
         # instance = await self.db.execute(select(self.model).offset(skip).limit(limit))

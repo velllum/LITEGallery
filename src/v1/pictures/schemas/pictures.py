@@ -8,6 +8,7 @@ class Base(BaseModel):
     state: str
     filename: str
     project_id: int
+    # path: str
     created_date: datetime
     updated_date: datetime
 
@@ -25,7 +26,6 @@ class Version(BaseModel):
 class Upload(Base):
     # original_link: str
     ...
-
 
 
 class Get(Base):

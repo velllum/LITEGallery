@@ -13,10 +13,10 @@ class PictureService:
         """- создать """
         return await self.__grud.create(data)
 
-    async def get_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
+    async def get_by_id_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
         """- получить список """
         # return [await instance.feature() for instance in await self.__grud.get_all(skip, limit)]
-        return await self.__grud.get_all(project_id, skip, limit)
+        return await self.__grud.get_by_id_all(project_id, skip, limit)
 
     # async def get(self, pk: int) -> type:
     #     """- получить по pk """

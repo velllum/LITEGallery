@@ -101,3 +101,17 @@ minio_manager.client.get_presigned_url(method='GET', bucket_name='big1920', obje
  - добавить запись в базу (переписать модель, не хранить версии картинок в бд)
  - добавить в хранилище оригинал
  - запустить сборку картинок ьразного формата в фоновом режиме, через celery
+
+
+
+`python -m src.v1.pictures.main` - запуск с локальной машины, из корневой директории ./ITMO
+
+Не забываем установить библиотеки
+`pip install -r requirements.txt`
+
+Запуск миграций через Alembic
+
+`alembic revision --autogenerate` - создать миграци автоматически
+
+`alembic upgrade head` - запустить миграцию для обновления базы
+
