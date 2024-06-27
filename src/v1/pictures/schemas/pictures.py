@@ -15,16 +15,17 @@ class Base(BaseModel):
 
 class Version(BaseModel):
     original: str
-    thumb: str
-    big_thumb: str
-    big_1920: str
-    d2500: str
+    thumb: str = None
+    big_thumb: str = None
+    big_1920: str = None
+    d2500: str = None
 
 
 class Upload(Base):
-    original_link: str
-    original_link_download: str
-    ...
+    # original_link: str
+    # original_link_download: str
+    version_link: Version
+    version_link_download: Version
 
 
 class Get(Base):

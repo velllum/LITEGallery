@@ -42,14 +42,9 @@ class Repository(AbstractRepository):
         instance = await self.__db.execute(
             select(self.model).where(self.model.project_id == project_id).offset(skip).limit(limit)
         )
+        if not instance:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ID НЕ НАЙДЕН')
         return instance.scalars().all()
-
-    # async def get_one(self, pk: int) -> Type[Any]:
-    #     """- получить по pk """
-    #     instance = await self.__db.get(self.model, pk)
-    #     if not instance:
-    #         raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ID НЕ НАЙДЕН')
-    #     return instance
 
 
 class PictureRepository(Repository):

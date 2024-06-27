@@ -11,7 +11,7 @@ from starlette import status
 from src.core.configs import settings
 from src.core.storages.manager import StorageManager
 from src.v1.pictures.models import Picture
-from src.v1.pictures.utils.pictures import get_full_path
+from src.v1.pictures.utils.pictures import get_full_path, get_path
 
 
 class AbstractRepository(ABC):
@@ -29,30 +29,29 @@ class AbstractRepository(ABC):
 
 class Repository(AbstractRepository):
 
-    def __init__(self, db: AsyncSession, storage_manager: StorageManager):
-        self.__db = db
+    def __init__(self, storage_manager: StorageManager):
         self.__storage = storage_manager
         self.__object = None
 
     async def add(self, file: UploadFile, instance: Type | Picture):
         """- добавить """
-        _object = self.__storage.client.put_object(
+        self.__object = self.__storage.client.put_object(
             bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
             object_name=await get_full_path(instance, 'original', file.filename),
             data=io.BytesIO(file.file.read()),
             content_type=file.content_type,
             length=file.size
         )
-        if not _object:
+        if not self.__object:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ОШИБКА ДОБАВЛЕНИЯ В ХРАНИЛИЩА')
-        self.__object = _object
         return self
 
-    async def get_by_id_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
+    async def get_by_id_all(self, instance_list: list) -> None:
         """- получить список """
-        # TODO: Описать получение всех файлов из хранилища по указанному id проекта project_id
-        # instance = await self.db.execute(select(self.model).offset(skip).limit(limit))
-        # return instance.scalars().all()
+        self.__storage.client.get_object(
+            bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
+            object_name=await get_path(instance),
+        )
 
     async def get_link(self, context_type=False):
         """- получить ссылку на файл """

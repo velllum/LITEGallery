@@ -15,7 +15,7 @@ async def get_picture_service(db: AsyncSession = async_db) -> PictureService:
     return PictureService(PictureRepository(db))
 
 
-async def get_storage_service(db: AsyncSession = async_db) -> StorageService:
+async def get_storage_service() -> StorageService:
     """- Зависимость между сервисом файлового хранилища и репозиторием с GRUD оперениями хранилища """
-    return StorageService(StorageRepository(db, storage_manager))
+    return StorageService(StorageRepository(storage_manager))
 
