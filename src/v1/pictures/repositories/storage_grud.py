@@ -32,12 +32,12 @@ class Repository(AbstractRepository):
     def __init__(self, db: AsyncSession, storage_manager: StorageManager):
         self.__db = db
         self.__storage = storage_manager
+        self.__object = None
 
-    async def add(self, file: UploadFile, instance: Type | Picture) -> ObjectWriteResult:
+    async def add(self, file: UploadFile, instance: Type | Picture):
         """- добавить """
         _object = self.__storage.client.put_object(
             bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
-            # object_name=await instance.get_full_path('original', file.filename),
             object_name=await get_full_path(instance, 'original', file.filename),
             data=io.BytesIO(file.file.read()),
             content_type=file.content_type,
@@ -45,13 +45,26 @@ class Repository(AbstractRepository):
         )
         if not _object:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ОШИБКА ДОБАВЛЕНИЯ В ХРАНИЛИЩА')
-        return _object
+        self.__object = _object
+        return self
 
     async def get_by_id_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
         """- получить список """
         # TODO: Описать получение всех файлов из хранилища по указанному id проекта project_id
         # instance = await self.db.execute(select(self.model).offset(skip).limit(limit))
         # return instance.scalars().all()
+
+    async def get_link(self, context_type=False):
+        """- получить ссылку на файл """
+        if not self.__object:
+            return None
+
+        return self.__storage.client.get_presigned_url(
+            method='GET',
+            bucket_name=self.__object.bucket_name,
+            object_name=self.__object.object_name,
+            response_headers={"response-content-type": "application/octet-stream"} if context_type else None,
+        )
 
 
 class StorageRepository(Repository):
