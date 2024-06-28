@@ -28,6 +28,9 @@ class StorageService:
     #     """- получить по pk """
     #     self.__instance = await self.storage.get_one(pk)
 
-    async def get_by_id_all(self, instance_list: list) -> list:
+    async def get_file_all(self, list_instance: list) -> list:
         """- получить список """
         # return [await instance.feature() for instance in await self.storage.get_all(pk, skip, limit)]
+        list_dct = []
+        for instance in list_instance:
+            await self.__storage.get_file_all(instance)

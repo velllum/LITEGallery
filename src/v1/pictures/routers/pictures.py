@@ -26,7 +26,7 @@ async def upload(picture: picture_service, storage: storage_service, file: Uploa
 @router.get('/{project_id}/pictures', response_model=List[Get])
 async def get_by_id_all(service: picture_service, storage: storage_service, project_id: int, skip: int = 0, limit: int = 100):
     """- получить список """
-    instance_list = await service.get_by_id_all(project_id, skip=skip, limit=limit)
-    storage_list = await storage.get_by_id_all(instance_list)
-    return storage_list
+    list_instance = await service.get_by_id_all(project_id, skip=skip, limit=limit)
+    list_storage = await storage.get_file_all(list_instance)
+    return list_storage
 
