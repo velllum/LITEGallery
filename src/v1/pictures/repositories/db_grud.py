@@ -1,6 +1,6 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import select
+from sqlalchemy import select, exists
 from typing import Type, Sequence, Any
 
 from fastapi import HTTPException
@@ -42,9 +42,12 @@ class Repository(AbstractRepository):
         instance = await self.__db.execute(
             select(self.model).where(self.model.project_id == project_id).offset(skip).limit(limit)
         )
-        if not instance:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail='ID НЕ НАЙДЕН')
-        return instance.scalars().all()
+
+        scalars_all = instance.scalars().all()
+
+        if not scalars_all:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'ID {project_id} НЕ НАЙДЕН')
+        return scalars_all
 
 
 class PictureRepository(Repository):
