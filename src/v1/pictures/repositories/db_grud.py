@@ -37,6 +37,14 @@ class Repository(AbstractRepository):
         await self.__db.refresh(instance)
         return instance
 
+    async def get_by_id(self, pk: int) -> Sequence[Any]:
+        """- получить по ID """
+        instance = await self.__db.get(self.model, pk)
+
+        if not instance:
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'ID {pk} НЕ НАЙДЕН')
+        return instance
+
     async def get_by_id_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
         """- получить список """
         instance = await self.__db.execute(
