@@ -1,5 +1,3 @@
-from typing import Annotated
-
 from fastapi import Depends
 from sqlalchemy.ext.asyncio import AsyncSession
 
@@ -21,7 +19,4 @@ async def get_storage_service() -> StorageService:
     """- Зависимость между сервисом файлового хранилища и репозиторием с GRUD оперениями хранилища """
     return StorageService(StorageRepository(storage_manager))
 
-
-picture_service = Annotated[PictureService, Depends(get_picture_service)]
-storage_service = Annotated[StorageService, Depends(get_storage_service)]
 

@@ -1,7 +1,13 @@
 from sqlalchemy import event
 from sqlalchemy.orm import Session
 
-from src.workers.tasks.pictures import task_add_picture_versions_to_storage
+from src.v1.pictures.workers.tasks.pictures import task_add_picture_versions_to_storage
+
+
+# from src.v1.pictures.workers.tasks import task_add_picture_versions_to_storage
+
+
+# from src.workers.tasks.pictures import task_add_picture_versions_to_storage
 
 
 @event.listens_for(Session, "after_flush")
