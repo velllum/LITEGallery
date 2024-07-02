@@ -1,12 +1,12 @@
 from typing import Any, Sequence
 
-from src.v1.pictures.repositories.db_grud import PictureRepository
+from src.v1.pictures.repositories import db_grud
 
 
 class PictureService:
     """- сервис (GRUD операций) БД """
 
-    def __init__(self, grud: PictureRepository):
+    def __init__(self, grud: db_grud.PictureRepository):
         self.__grud = grud
 
     async def create(self, **data) -> type:
@@ -19,7 +19,7 @@ class PictureService:
 
     async def get_by_id(self, pk: int) -> Sequence[Any]:
         """- получить список """
-        return await self.__grud.get_by_id_all(pk)
+        return await self.__grud.get_by_id(pk)
 
 
 

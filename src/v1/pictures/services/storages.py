@@ -2,7 +2,7 @@ from typing import Type, Any, Sequence
 
 from fastapi import UploadFile
 
-from src.v1.pictures.models import Picture
+from src.v1.pictures.models.pictures import Picture
 from src.v1.pictures.repositories.storage_grud import StorageRepository
 from src.v1.pictures.schemas.pictures import Version
 

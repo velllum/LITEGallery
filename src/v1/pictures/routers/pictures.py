@@ -5,7 +5,8 @@ from starlette import status
 
 from src.v1.pictures.dependens.pictures_service import get_picture_service, get_storage_service
 from src.v1.pictures.schemas.pictures import Get, Upload, ExtEnum
-from src.v1.pictures.services import PictureService, StorageService
+from src.v1.pictures.services.pictures import PictureService
+from src.v1.pictures.services.storages import StorageService
 
 router = APIRouter(prefix='/gallery', tags=['gallery'])
 

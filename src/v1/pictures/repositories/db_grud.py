@@ -1,13 +1,13 @@
 from abc import ABC, abstractmethod
 
-from sqlalchemy import select, exists
+from sqlalchemy import select
 from typing import Type, Sequence, Any
 
 from fastapi import HTTPException
 from sqlalchemy.ext.asyncio import AsyncSession
 from starlette import status
 
-from src.v1.pictures.models import Picture
+from src.v1.pictures.models import pictures
 
 
 class AbstractRepository(ABC):
@@ -59,4 +59,4 @@ class Repository(AbstractRepository):
 
 
 class PictureRepository(Repository):
-    model = Picture
+    model = pictures.Picture

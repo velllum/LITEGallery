@@ -5,7 +5,8 @@ from src.core.database import get_async_db
 from src.core.storages.manager import storage_manager
 from src.v1.pictures.repositories.db_grud import PictureRepository
 from src.v1.pictures.repositories.storage_grud import StorageRepository
-from src.v1.pictures.services import PictureService, StorageService
+from src.v1.pictures.services.pictures import PictureService
+from src.v1.pictures.services.storages import StorageService
 
 async_db = Depends(get_async_db)
 

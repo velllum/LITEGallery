@@ -1,7 +1,6 @@
 from sqlalchemy import event
 from sqlalchemy.orm import Session
 
-from src.v1.pictures.workers.tasks.pictures import task_add_picture_versions_to_storage
 
 
 # from src.v1.pictures.workers.tasks import task_add_picture_versions_to_storage
@@ -21,6 +20,8 @@ def receive_after_flush(session, flush_context):
 def receive_after_commit(session):
     pk = session.info.get('pk')
     project_id = session.info.get('project_id')
-    task_add_picture_versions_to_storage(pk, project_id)
+
+    from src.v1.pictures.workers import tasks
+    tasks.task_add_picture_versions_to_storage(pk, project_id)
     # task_add_picture_versions_to_storage.delay(**session.info.get('after_flush'))
 

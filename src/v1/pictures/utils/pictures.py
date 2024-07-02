@@ -1,7 +1,7 @@
 import os
 from typing import Type
 
-from src.v1.pictures.models import Picture
+from src.v1.pictures.models.pictures import Picture
 
 
 async def get_full_path(instance: Type, new_name_file: str, old_name_file: str) -> str:

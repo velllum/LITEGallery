@@ -10,7 +10,7 @@ from starlette import status
 
 from src.core.configs import settings
 from src.core.storages.manager import StorageManager
-from src.v1.pictures.models import Picture
+from src.v1.pictures.models.pictures import Picture
 from src.v1.pictures.schemas.pictures import VersionNameEnum
 from src.v1.pictures.utils.pictures import get_full_path, get_path
 
