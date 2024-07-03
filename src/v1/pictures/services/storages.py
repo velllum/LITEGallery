@@ -1,4 +1,4 @@
-from typing import Type, Any, Sequence
+from typing import Type, Any, Sequence, List, Dict
 
 from fastapi import UploadFile
 
@@ -25,7 +25,19 @@ class StorageService:
         })
         return dct
 
-    async def get_file_all(self, list_instance: Sequence[Any]):
+    async def get_file(self, instance: Sequence[Any]) -> dict[str | Any, Any]:
+        """- получить по ID """
+        await self.__storage.get_file(instance)
+
+        dct = dict(instance.__dict__)
+
+        dct.update(**{
+            'version_link_load': Version(original=await self.__storage.get_link()),
+            'version_link_download': Version(original=await self.__storage.get_link(True)),
+        })
+        return dct
+
+    async def get_file_all(self, list_instance: Sequence[Any]) -> list[dict[Any, Any]]:
         """- получить список """
         lst = []
         for instance in list_instance:
@@ -46,3 +58,4 @@ class StorageService:
             lst.append(dct)
 
         return lst
+

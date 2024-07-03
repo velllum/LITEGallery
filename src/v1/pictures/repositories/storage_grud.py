@@ -7,6 +7,7 @@ from typing import Type, Any
 from fastapi import HTTPException, UploadFile
 from minio.helpers import ObjectWriteResult
 from starlette import status
+from urllib3 import BaseHTTPResponse, HTTPResponse
 
 from src.core.configs import settings
 from src.core.storages.manager import StorageManager
@@ -57,6 +58,22 @@ class Repository(AbstractRepository):
         )
         self.__list_objects = list(list_objects)
         return self.__list_objects
+
+    async def get_file(self, instance: Type | Picture) -> HTTPResponse | BaseHTTPResponse:
+        """- получить список """
+
+        # get_full_path()
+        # get_path()
+
+        self.__object = self.__storage.client.get_object(
+            bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
+            object_name=VersionNameEnum.ORIGINAL.value
+        )
+
+        if not self.__object:
+            raise HTTPException(status_code=status.HTTP_200_OK, detail='ОШИБКА ПОЛУЧЕНИЯ ИЗ ХРАНИЛИЩА')
+
+        return self.__object
 
     async def get_link(self, context_type: bool = False) -> str | None:
         """- получить ссылку на файл """

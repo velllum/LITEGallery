@@ -1,3 +1,5 @@
+import asyncio
+
 from sqlalchemy import event
 from sqlalchemy.orm import Session
 
@@ -18,10 +20,12 @@ def receive_after_flush(session, flush_context):
 
 @event.listens_for(Session, "after_commit")
 def receive_after_commit(session):
+
     pk = session.info.get('pk')
     project_id = session.info.get('project_id')
 
     from src.v1.pictures.workers import tasks
-    tasks.task_add_picture_versions_to_storage(pk, project_id)
+    loop = asyncio.get_event_loop()
+    loop.create_task(tasks.task_add_picture_versions_to_storage(pk, project_id))
     # task_add_picture_versions_to_storage.delay(**session.info.get('after_flush'))
 

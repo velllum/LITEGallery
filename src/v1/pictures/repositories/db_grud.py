@@ -22,6 +22,11 @@ class AbstractRepository(ABC):
         """- получить список """
         raise NotImplementedError
 
+    @abstractmethod
+    async def get_by_id(self, *args, **kwargs) -> None:
+        """- получить по ID """
+        raise NotImplementedError
+
 
 class Repository(AbstractRepository):
     model = None
