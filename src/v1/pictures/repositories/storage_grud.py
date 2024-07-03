@@ -28,6 +28,11 @@ class AbstractRepository(ABC):
         """- получить список """
         raise NotImplementedError
 
+    @abstractmethod
+    async def get_original_file(self, *args, **kwargs) -> None:
+        """- получить оригинальную версию файла """
+        raise NotImplementedError
+
 
 class Repository(AbstractRepository):
 
@@ -36,6 +41,18 @@ class Repository(AbstractRepository):
         self.__object = None
         self.__list_objects = None
         self.__instance = None
+
+    async def get_original_file(self, instance: Type | Picture) -> HTTPResponse | BaseHTTPResponse:
+        """- получить оригинальную версию файла """
+        self.__object = self.__storage.client.get_object(
+            bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
+            object_name=f'{await get_path(instance)}{VersionNameEnum.ORIGINAL.value}'
+        )
+
+        if not self.__object:
+            raise HTTPException(status_code=status.HTTP_200_OK, detail='ОШИБКА ПОЛУЧЕНИЯ ИЗ ХРАНИЛИЩА')
+
+        return self.__object
 
     async def add(self, file: UploadFile, instance: Type | Picture) -> ObjectWriteResult:
         """- добавить """
@@ -58,22 +75,6 @@ class Repository(AbstractRepository):
         )
         self.__list_objects = list(list_objects)
         return self.__list_objects
-
-    async def get_file(self, instance: Type | Picture) -> HTTPResponse | BaseHTTPResponse:
-        """- получить список """
-
-        # get_full_path()
-        # get_path()
-
-        self.__object = self.__storage.client.get_object(
-            bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
-            object_name=VersionNameEnum.ORIGINAL.value
-        )
-
-        if not self.__object:
-            raise HTTPException(status_code=status.HTTP_200_OK, detail='ОШИБКА ПОЛУЧЕНИЯ ИЗ ХРАНИЛИЩА')
-
-        return self.__object
 
     async def get_link(self, context_type: bool = False) -> str | None:
         """- получить ссылку на файл """

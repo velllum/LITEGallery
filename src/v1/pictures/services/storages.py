@@ -1,6 +1,7 @@
-from typing import Type, Any, Sequence, List, Dict
+from typing import Type, Any, Sequence
 
 from fastapi import UploadFile
+from urllib3 import HTTPResponse, BaseHTTPResponse
 
 from src.v1.pictures.models.pictures import Picture
 from src.v1.pictures.repositories.storage_grud import StorageRepository
@@ -12,6 +13,11 @@ class StorageService:
 
     def __init__(self, storage: StorageRepository):
         self.__storage = storage
+
+    async def get_original_file(self, instance: Type) -> HTTPResponse | BaseHTTPResponse:
+        """- получить оригинальную версию файла """
+        original_file = await self.__storage.get_original_file(instance)
+        return original_file
 
     async def add(self, file: UploadFile, instance: Type | Picture) -> dict[str | Any, Any]:
         """- создать """
@@ -25,15 +31,15 @@ class StorageService:
         })
         return dct
 
-    async def get_file(self, instance: Sequence[Any]) -> dict[str | Any, Any]:
+    async def get_file(self, instance: Type) -> dict[str | Any, Any]:
         """- получить по ID """
-        await self.__storage.get_file(instance)
+        await self.__storage.get_file_all(instance)
 
         dct = dict(instance.__dict__)
 
         dct.update(**{
-            'version_link_load': Version(original=await self.__storage.get_link()),
-            'version_link_download': Version(original=await self.__storage.get_link(True)),
+            'version_link_load': Version(**await self.__storage.get_link_all(instance)),
+            'version_link_download': Version(**await self.__storage.get_link_all(instance, True)),
         })
         return dct
 

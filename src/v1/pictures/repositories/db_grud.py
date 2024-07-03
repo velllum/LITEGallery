@@ -42,12 +42,12 @@ class Repository(AbstractRepository):
         await self.__db.refresh(instance)
         return instance
 
-    async def get_by_id(self, pk: int) -> Sequence[Any]:
+    async def get_by_id(self, pk: int) -> Any:
         """- получить по ID """
         instance = await self.__db.get(self.model, pk)
 
         if not instance:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'ID {pk} НЕ НАЙДЕН')
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'ID {id} НЕ НАЙДЕН')
         return instance
 
     async def get_by_id_all(self, project_id: int, skip: int = 0, limit: int = 100) -> Sequence[Any]:
@@ -59,9 +59,10 @@ class Repository(AbstractRepository):
         scalars_all = instance.scalars().all()
 
         if not scalars_all:
-            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'ID {project_id} НЕ НАЙДЕН')
+            raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail=f'PROJECT ID {project_id} НЕ НАЙДЕН')
         return scalars_all
 
 
 class PictureRepository(Repository):
     model = pictures.Picture
+

@@ -1,4 +1,7 @@
+from io import BytesIO
 from pprint import pprint
+
+from PIL import Image
 
 from src.core.storages.manager import storage_manager
 from src.v1.pictures.repositories.db_grud import PictureRepository
@@ -13,7 +16,7 @@ from src.v1.pictures.workers.celery import celery
 
 
 @celery.task
-async def task_add_picture_versions_to_storage(pk: int, project_id: int):
+async def task_add_picture_versions_to_storage(pk: int):
 
     storage = StorageService(StorageRepository(storage_manager))
 
@@ -22,10 +25,14 @@ async def task_add_picture_versions_to_storage(pk: int, project_id: int):
 
     instance = await picture.get_by_id(pk)
 
-    pprint(await storage.get_file_all([instance]))
+    # pprint(await storage.get_file(instance))
 
-    print('Hello world')
-    print(instance.project_id)
+    print(await storage.get_original_file(instance))
+    response = await storage.get_original_file(instance)
+    image_data = response.read()
+    image = Image.open(BytesIO(image_data))
+
+    print(image.size, image.info)
 
     if instance:
         print(instance)

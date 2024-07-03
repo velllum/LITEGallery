@@ -33,6 +33,14 @@ async def upload(picture: picture_service, storage: storage_service,
     return storage_dict
 
 
+@router.get('/pictures/{pk}', response_model=Get)
+async def get_by_id_all(service: picture_service, storage: storage_service, pk: int):
+    """- получить список """
+    instance = await service.get_by_id(pk)
+    storage = await storage.get_file(instance)
+    return storage
+
+
 @router.get('/{project_id}/pictures', response_model=List[Get])
 async def get_by_id_all(service: picture_service, storage: storage_service, project_id: int, skip: int = 0, limit: int = 100):
     """- получить список """

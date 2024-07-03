@@ -17,8 +17,8 @@ class PictureService:
         """- получить список """
         return await self.__grud.get_by_id_all(project_id, skip, limit)
 
-    async def get_by_id(self, pk: int) -> Sequence[Any]:
-        """- получить список """
+    async def get_by_id(self, pk: int) -> Any:
+        """- получить по ID """
         return await self.__grud.get_by_id(pk)
 
 
