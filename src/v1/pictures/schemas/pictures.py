@@ -33,12 +33,12 @@ class StateEnum(str, BaseEnum):
     ERROR: str = 'error'
 
 
-class VersionNameEnum(str, BaseEnum):
-    ORIGINAL: str = 'original'
-    THUMB: str = 'thumb'
-    BIGTHUMB: str = 'bigthumb'
-    BIG1920: str = 'big1920'
-    D2500: str = 'd2500'
+class VersionNameEnum(tuple, BaseEnum):
+    ORIGINAL: tuple = 'original', 0, 0
+    THUMB: tuple = 'thumb', 150, 120
+    BIGTHUMB: tuple = 'bigthumb', 700, 700
+    BIG1920: tuple = 'big1920', 1920, 1080
+    D2500: tuple = 'd2500', 2500, 2500
 
 
 class Base(BaseModel):

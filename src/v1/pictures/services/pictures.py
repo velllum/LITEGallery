@@ -22,4 +22,3 @@ class PictureService:
         return await self.__grud.get_by_id(pk)
 
 
-

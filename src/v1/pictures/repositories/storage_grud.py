@@ -51,7 +51,6 @@ class Repository(AbstractRepository):
 
         if not self.__object:
             raise HTTPException(status_code=status.HTTP_200_OK, detail='ОШИБКА ПОЛУЧЕНИЯ ИЗ ХРАНИЛИЩА')
-
         return self.__object
 
     async def add(self, file: UploadFile, instance: Type | Picture) -> ObjectWriteResult:
@@ -84,7 +83,7 @@ class Repository(AbstractRepository):
         return await self.__generate_link(self.__object, context_type)
 
     async def get_link_all(self, instance: Type | Picture, context_type: bool = False) -> dict[Any, str] | None:
-        """- получить ссылку на файл """
+        """- получить все ссылки на файлы """
         if not self.__list_objects:
             return None
 
