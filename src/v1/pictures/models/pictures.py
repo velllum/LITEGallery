@@ -15,13 +15,14 @@ class Picture(Base):
     # uploaded, processing, done, error (загружено, обработка, выполнено, ошибка)
     # меняется по состоянию работы websocket
     state = Column(String, index=True, nullable=False, default=StateEnum.UPLOADED.value)
+    original_filename = Column(String, nullable=False)
     to_fit = Column(Boolean, index=True, default=False)
     created_date = Column(DateTime, server_default=func.now())
     updated_date = Column(DateTime, server_default=func.now(), onupdate=func.now())
 
     def __repr__(self) -> str:
         return (f"{self.__class__.__name__}(id={self.id!r}, project_id={self.project_id!r}, "
-                f"state={self.state!r}, to_fit={self.to_fit!r})")
+                f"state={self.state!r}, to_fit={self.to_fit!r}, original_filename={self.original_filename!r})")
 
     @staticmethod
     async def create(data):

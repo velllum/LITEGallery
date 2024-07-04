@@ -25,16 +25,19 @@ async def task_add_picture_versions_to_storage(pk: int):
 
     instance = await picture.get_by_id(pk)
 
-    # pprint(await storage.get_file(instance))
+    print('*******', instance)
 
-    print(await storage.get_original_file(instance))
     response = await storage.get_original_file(instance)
     image_data = response.read()
+
+    print('-------', response.data)
+    print('+++++++++', response.info())
+    # print('+++++++++', image_data)
+
     image = Image.open(BytesIO(image_data))
 
     print(image.size, image.info)
 
     if instance:
         print(instance)
-
 

@@ -4,9 +4,10 @@ from fastapi import APIRouter, Depends, UploadFile, Form, File, HTTPException
 from starlette import status
 
 from src.v1.pictures.dependens.pictures_service import get_picture_service, get_storage_service
-from src.v1.pictures.schemas.pictures import Get, Upload, ExtEnum
+from src.v1.pictures.schemas.pictures import Get, Upload, ExtEnum, VersionNameEnum
 from src.v1.pictures.services.pictures import PictureService
 from src.v1.pictures.services.storages import StorageService
+from src.v1.pictures.utils.pictures import get_original_filename
 
 router = APIRouter(prefix='/gallery', tags=['gallery'])
 
@@ -25,10 +26,17 @@ async def upload(picture: picture_service, storage: storage_service,
     ext.lower() if ext.isupper() else ext
 
     if ext not in ExtEnum.values():
-        raise HTTPException(status_code=status.HTTP_200_OK,
-                            detail=f'ОШИБКА .{ext} ФАЙЛ С ДАННЫМ РАСШИРЕНИЕМ ЗАПРЕЩЕН ДЛЯ ЗАГРУЗКИ')
+        raise HTTPException(
+            status_code=status.HTTP_200_OK,
+            detail=f'ОШИБКА .{ext} ФАЙЛ С ДАННЫМ РАСШИРЕНИЕМ ЗАПРЕЩЕН ДЛЯ ЗАГРУЗКИ'
+        )
 
-    picture_instance = await picture.create(project_id=project_id, to_fit=to_fit)
+    picture_instance = await picture.create(
+        project_id=project_id,
+        to_fit=to_fit,
+        original_filename=await get_original_filename(VersionNameEnum.ORIGINAL.value, file.filename)
+    )
+
     storage_dict = await storage.add(file, picture_instance)
     return storage_dict
 

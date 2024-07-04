@@ -13,7 +13,7 @@ from src.core.configs import settings
 from src.core.storages.manager import StorageManager
 from src.v1.pictures.models.pictures import Picture
 from src.v1.pictures.schemas.pictures import VersionNameEnum
-from src.v1.pictures.utils.pictures import get_full_path, get_path
+from src.v1.pictures.utils.pictures import get_full_path_original_file, get_path
 
 
 class AbstractRepository(ABC):
@@ -46,7 +46,7 @@ class Repository(AbstractRepository):
         """- получить оригинальную версию файла """
         self.__object = self.__storage.client.get_object(
             bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
-            object_name=f'{await get_path(instance)}{VersionNameEnum.ORIGINAL.value}'
+            object_name=await get_full_path_original_file(instance, VersionNameEnum.ORIGINAL.value),
         )
 
         if not self.__object:
@@ -58,7 +58,7 @@ class Repository(AbstractRepository):
         """- добавить """
         self.__object = self.__storage.client.put_object(
             bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
-            object_name=await get_full_path(instance, VersionNameEnum.ORIGINAL.value, file.filename),
+            object_name=await get_full_path_original_file(instance, VersionNameEnum.ORIGINAL.value),
             data=io.BytesIO(file.file.read()),
             content_type=file.content_type,
             length=file.size

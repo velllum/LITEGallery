@@ -46,6 +46,7 @@ class Base(BaseModel):
     state: str
     to_fit: bool
     project_id: int
+    original_filename: str
     created_date: datetime
     updated_date: datetime
     model_config = ConfigDict(from_attributes=True)
