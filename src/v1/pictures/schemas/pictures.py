@@ -1,5 +1,6 @@
 import enum
 from datetime import datetime
+from typing import Any
 
 from pydantic import BaseModel, ConfigDict
 
@@ -19,6 +20,34 @@ class BaseEnum(enum.Enum):
         return list(cls._value2member_map_.keys())
 
 
+class VersionNameEnum(tuple, BaseEnum):
+    ORIGINAL: tuple = 'original', 0, 0
+    THUMB: tuple = 'thumb', 150, 120
+    BIGTHUMB: tuple = 'bigthumb', 700, 700
+    BIG1920: tuple = 'big1920', 1920, 1080
+    D2500: tuple = 'd2500', 2500, 2500
+
+    @property
+    def title(self) -> Any:
+        """- наименование """
+        return self.value[0]
+
+    @property
+    def size(self):
+        """- получить данные размера """
+        return self.value[1], self.value[2]
+
+    @property
+    def length(self):
+        """- длина """
+        return self.value[1]
+
+    @property
+    def width(self):
+        """- ширина """
+        return self.value[2]
+
+
 class ExtEnum(str, BaseEnum):
     # TODO: лучший вариан держать список с расширениями в базе
     PNG: str = 'png'
@@ -31,14 +60,6 @@ class StateEnum(str, BaseEnum):
     PROCESSING: str = 'processing'
     DONE: str = 'done'
     ERROR: str = 'error'
-
-
-class VersionNameEnum(tuple, BaseEnum):
-    ORIGINAL: tuple = 'original', 0, 0
-    THUMB: tuple = 'thumb', 150, 120
-    BIGTHUMB: tuple = 'bigthumb', 700, 700
-    BIG1920: tuple = 'big1920', 1920, 1080
-    D2500: tuple = 'd2500', 2500, 2500
 
 
 class Base(BaseModel):

@@ -46,7 +46,7 @@ class Repository(AbstractRepository):
         """- получить оригинальную версию файла """
         self.__object = self.__storage.client.get_object(
             bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
-            object_name=await get_full_path_original_file(instance, VersionNameEnum.ORIGINAL.value),
+            object_name=await get_full_path_original_file(instance, VersionNameEnum.ORIGINAL.title),
         )
 
         if not self.__object:
@@ -57,7 +57,7 @@ class Repository(AbstractRepository):
         """- добавить """
         self.__object = self.__storage.client.put_object(
             bucket_name=self.__storage.get_bucket(settings.MINIO_CLIENT_NAME_BUCKETS),
-            object_name=await get_full_path_original_file(instance, VersionNameEnum.ORIGINAL.value),
+            object_name=await get_full_path_original_file(instance, VersionNameEnum.ORIGINAL.title),
             data=io.BytesIO(file.file.read()),
             content_type=file.content_type,
             length=file.size

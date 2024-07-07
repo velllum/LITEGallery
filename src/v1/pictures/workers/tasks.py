@@ -1,5 +1,4 @@
 from io import BytesIO
-from pprint import pprint
 
 from PIL import Image
 
@@ -36,7 +35,7 @@ async def task_add_picture_versions_to_storage(pk: int):
 
     image = Image.open(BytesIO(image_data))
 
-    print(image.size, image.info)
+    print('0000000000', image.size, image.info)
 
     if instance:
         print(instance)

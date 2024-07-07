@@ -34,7 +34,7 @@ async def upload(picture: picture_service, storage: storage_service,
     picture_instance = await picture.create(
         project_id=project_id,
         to_fit=to_fit,
-        original_filename=await get_original_filename(VersionNameEnum.ORIGINAL.value, file.filename)
+        original_filename=await get_original_filename(VersionNameEnum.ORIGINAL.title, file.filename)
     )
 
     storage_dict = await storage.add(file, picture_instance)
