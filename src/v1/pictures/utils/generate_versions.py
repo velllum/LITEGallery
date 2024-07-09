@@ -1,21 +1,21 @@
 from PIL import Image
 
 
-class GenerateVersions:
-    """- генератор версий картинок """
+class PictureVersions:
+    """- версии картинок """
 
-    # def __init__(self):
-    #     self.__im = Image()
+    def __init__(self):
+        self.__im_original = None
 
     # Image.Resampling.LANCZOS.
     # image.thumbnail((width, height))
 
-    @staticmethod
-    def open():
-        """- открыть картинку """
-        with Image.open("test.jpg") as img:
-            img.thumbnail()
+    def init(self, original_file):
+        self.__open_original(original_file)
 
+    def __open_original(self, file):
+        with Image.open(file) as img:
+            self.__im_original = img
 
 
 
